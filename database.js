@@ -27,15 +27,15 @@ export function initTable(db) {
     })
 }
 
-/** 
- *  
- * @param {sqlite.Database} db
- * @param {string} name
- * @param {number} price
- * @param {string} photo
+/**
+ * 
+ * @param {sqlite.Database} db 
+ * @param {string} name 
+ * @param {number} price 
+ * @param {string} photo 
  */
 export function insertProduct(db, name, price, photo) {
-    db.run('INSERT INTO product (photo,name,price)', { name, price, photo }, (err) => {
+    db.run(`INSERT INTO product (photo,name,price) VALUES ($photo, $name, $price`, { name, price, photo }, (err) => {
       if(err) {
         console.log(err)
         throw err
@@ -48,15 +48,19 @@ export function insertProduct(db, name, price, photo) {
 
 /**
  * 
- * @param {mysql.Connection} dbConnection 
+ * @param {sqlite.Database} db 
  */
-export function getProduct(dbConnection) {
-    dbConnection.query('SELECT * FROM product', (err, result) => {
-      if(err) {
-        console.log(err)
-        throw err
-      }
-      console.log(result)
-      return result
+export function getProduct(db) {
+    return new Promise((resolve, reject) => {
+        db.all(`SELECT * FROM product`, (err, results) => {
+            if (err) {
+            reject (err)    
+            }
+
+        console.log('Query Results', results)
+        resolve(results)
+
     })
-  }
+
+})
+}
