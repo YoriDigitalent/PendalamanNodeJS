@@ -12,8 +12,8 @@ export function initDatabase() {
 
 }
 
-/** 
- *  
+/**
+ * 
  * @param {sqlite.Database} db 
  */
 export function initTable(db) {

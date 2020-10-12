@@ -3,10 +3,13 @@ import hbs from 'hbs'
 import path from 'path'
 import morgan from 'morgan'
 import bodyParser from 'body-parser'
+import {initDatabase, initTable, insertProduct} from './database.js'
 
 const __dirname = path.resolve()
 
 const app = express()
+const db = initDatabase()
+initTable(db)
 
 app.set('views', __dirname + '/layouts')
 app.set('view engine', 'html')
@@ -16,7 +19,7 @@ app.engine('html', hbs.__express)
 app.use(morgan('combined'))
 
 //parse request bodey
-app.use(bodyParser.urlencoded())
+app.use(bodyParser.urlencoded({extended: false}))
 
 //serve static file
 app.use('/assets', express.static(__dirname + '/assets'))
@@ -37,7 +40,11 @@ app.get('/add-product', (req, res, next) => {
 //method post
 app.post('/add-product', (req, res, next) => {
     console.log('Request', req.body)
-    res.send(req.body)
+    //insert product
+    insertProduct(db, req.body.name, parseInt(req.body.price), '-')
+
+    //redirect
+    res.redirect('/product')
 })
 
 app.use((err, req, res, next) => {
