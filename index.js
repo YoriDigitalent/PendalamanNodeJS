@@ -1,3 +1,6 @@
+import dotenv from 'dotenv'
+dotenv.config()
+
 import express from 'express'
 import hbs from 'hbs'
 import path from 'path'
@@ -19,7 +22,6 @@ app.engine('html', hbs.__express)
 
 //use file upload
 app.use(fileUpload())
-
 
 // log incoming reques
 app.use(morgan('combined'))
@@ -70,6 +72,7 @@ app.post('/add-product', (req, res, next) => {
     //get fileName
     const fileName = req.files.photo.name
 
+    //write file
     fs.writeFile(path.join(__dirname, '/files', fileName), req.files.photo.data, (err) => {
         if (err) {
             console.error(err)
@@ -88,6 +91,7 @@ app.use((err, req, res, next) => {
     res.send(err, message)
 })
 
-app.listen(8010, () => {
-    console.log('App listen on port 8010')
+//use port environment variable
+app.listen(process.env.PORT, () => {
+    console.log(`App listen on port ${process.env.PORT}`)
 })
