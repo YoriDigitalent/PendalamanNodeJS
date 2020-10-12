@@ -16,7 +16,7 @@ app.engine('html', hbs.__express)
 app.use(morgan('combined'))
 
 //parse request bodey
-app.use(bodyParser.urlencoded)
+app.use(bodyParser.urlencoded())
 
 //serve static file
 app.use('/assets', express.static(__dirname + '/assets'))
